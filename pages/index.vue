@@ -2,7 +2,7 @@
 .container(:class="{'theme-one': selectedTheme === 'one', 'theme-two': selectedTheme === 'two', 'theme-three': selectedTheme === 'three'}")
   .calc-container
     .header
-      h1.top-text calc
+      h1.top-text calc.
       .theme-toggle
         h6.top-text Theme
         .toggle-buttons
@@ -18,6 +18,7 @@
             .three(@click="selectedTheme = 'three'")
               .active-toggle(v-if="selectedTheme === 'three'")
     .display
+
     .input
 </template>
 
@@ -77,7 +78,7 @@ export default {
       margin-right: 0
 .toggle
   display: flex
-  height: 1.1rem
+  height: 1.15rem
   border-radius: 10rem
   .one, .two, .three
     flex: 1
@@ -85,10 +86,12 @@ export default {
   transition: 0.5s
   height: 0.8rem
   width: 0.8rem
-  margin: 0.15rem 0 0 0.15rem
+  margin: 0.16rem 0 0 0.15rem
   border-radius: 100%
 .display
-  flex: 0.4
+  flex: 0.3
+  margin: 1.5rem 0
+  border-radius: 0.5rem
 .input
   flex: 1
 .theme-one
@@ -99,6 +102,8 @@ export default {
     background: $theme-one-action
   .toggle
     background: $theme-one-secondary
+  .display
+    background: $theme-one-screen
 .theme-two
   background-color: $theme-two-primary
   .top-text
@@ -107,6 +112,8 @@ export default {
     background: $theme-two-action
   .toggle
     background: $theme-two-secondary
+  .display
+    background: $theme-two-screen
 .theme-three
   background-color: $theme-three-primary
   .top-text
@@ -115,4 +122,6 @@ export default {
     background: $theme-three-action
   .toggle
     background: $theme-three-secondary
+  .display
+    background: $theme-three-screen
 </style>
