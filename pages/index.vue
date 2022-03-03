@@ -133,7 +133,7 @@ export default {
   p
     margin: 0
     margin-top: 0.5rem
-    font-size: 1.5rem
+    font-size: 1.8rem
   display: flex
   border-radius: 0.5rem
   justify-content: center
@@ -168,16 +168,24 @@ export default {
   .button
     p
       color: $theme-one-text
+    box-shadow: 0px 5px 2px $theme-one-key-shadow
     background: $theme-one-key
   .del
     p
       font-size: 1.2rem
+      color: white
+    box-shadow: 0px 5px 2px $theme-one-del-reset-shadow
     background: $theme-one-del-reset
   .reset
     p
       font-size: 1.2rem
+      color: white
+    box-shadow: 0px 5px 2px $theme-one-del-reset-shadow
     background: $theme-one-del-reset
   .equal
+    p
+      color: white
+    box-shadow: 0px 5px 2px $theme-one-action-shadow
     background: $theme-one-action
 .theme-two
   background-color: $theme-two-primary
