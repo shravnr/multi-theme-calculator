@@ -18,8 +18,27 @@
             .three(@click="selectedTheme = 'three'")
               .active-toggle(v-if="selectedTheme === 'three'")
     .display
-
-    .input
+    .input-container
+      .input
+        .row.row-one
+          .button(v-for="i in [7, 8, 9]")
+            p {{i}}
+          .del
+            p DEL
+        .row.row-two
+          .button(v-for="i in [4, 5, 6,'+']")
+            p {{i}}
+        .row.row-three
+          .button(v-for="i in [1, 2, 3, '-']")
+            p {{i}}
+        .row.row-four
+          .button(v-for="i in ['.', 0, '/', 'x']")
+            p {{i}}
+        .row.row-five
+          .button-last-row.reset
+            p RESET
+          .button-last-row.equal
+            p =
 </template>
 
 <script>
@@ -29,12 +48,18 @@ export default {
       selectedTheme: "one",
     };
   },
+  computed: {
+    theme() {
+      return {
+        "--theme-primary": "$theme-" + this.selectedTheme + "-primary",
+      };
+    },
+  },
 };
 </script>
 
 <style lang="sass" scoped>
 @import '~/assets/styles/main'
-
 .container
   display: flex
   flex-direction: column
@@ -47,7 +72,7 @@ export default {
   display: flex
   flex-direction: column
   width: 35vw
-  height: 75vh
+  height: 85vh
 .header
   flex: 0.1
   display: flex
@@ -68,7 +93,7 @@ export default {
   flex-direction: column
 .numbers
   display: flex
-  padding: 0 0.25rem
+  padding: 0 0.5rem
   p
     margin: 0
     margin-bottom: 0.25rem
@@ -78,22 +103,56 @@ export default {
       margin-right: 0
 .toggle
   display: flex
-  height: 1.15rem
+  height: 1.2rem
   border-radius: 10rem
   .one, .two, .three
     flex: 1
 .active-toggle
   transition: 0.5s
-  height: 0.8rem
-  width: 0.8rem
-  margin: 0.16rem 0 0 0.15rem
+  height: 0.75rem
+  width: 0.75rem
+  margin: 0.22rem 0 0 0.2rem
   border-radius: 100%
 .display
   flex: 0.3
   margin: 1.5rem 0
   border-radius: 0.5rem
-.input
+.input-container
   flex: 1
+  display: flex
+  border-radius: 0.5rem
+.row
+  display: flex
+  margin-bottom: 1.5rem
+.input
+  display: grid
+  grid-template-columns: 1fr
+  padding: 2rem 2rem 1rem
+.button, .del
+  cursor: pointer
+  p
+    margin: 0
+    margin-top: 0.5rem
+    font-size: 1.5rem
+  display: flex
+  border-radius: 0.5rem
+  justify-content: center
+  align-items: center
+  width: 6rem
+  margin-right: 1rem
+.button-last-row
+  cursor: pointer
+  flex: 1
+  p
+    margin: 0
+    margin-top: 0.5rem
+    font-size: 1.5rem
+  display: flex
+  border-radius: 0.5rem
+  justify-content: center
+  align-items: center
+  width: 6rem
+  margin-right: 1rem
 .theme-one
   background-color: $theme-one-primary
   .top-text
@@ -104,6 +163,22 @@ export default {
     background: $theme-one-secondary
   .display
     background: $theme-one-screen
+  .input-container
+    background: $theme-one-secondary
+  .button
+    p
+      color: $theme-one-text
+    background: $theme-one-key
+  .del
+    p
+      font-size: 1.2rem
+    background: $theme-one-del-reset
+  .reset
+    p
+      font-size: 1.2rem
+    background: $theme-one-del-reset
+  .equal
+    background: $theme-one-action
 .theme-two
   background-color: $theme-two-primary
   .top-text
