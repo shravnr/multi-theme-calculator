@@ -111,7 +111,7 @@ export default {
   transition: 0.5s
   height: 0.75rem
   width: 0.75rem
-  margin: 0.22rem 0 0 0.2rem
+  margin: 0.23rem 0 0 0.25rem
   border-radius: 100%
 .display
   flex: 0.3
@@ -197,6 +197,30 @@ export default {
     background: $theme-two-secondary
   .display
     background: $theme-two-screen
+  .input-container
+    background: $theme-two-secondary
+  .button
+    p
+      color: $theme-two-text
+    box-shadow: 0px 5px 2px $theme-two-key-shadow
+    background: $theme-two-key
+  .del
+    p
+      font-size: 1.2rem
+      color: white
+    box-shadow: 0px 5px 2px $theme-two-del-reset-shadow
+    background: $theme-two-del-reset
+  .reset
+    p
+      font-size: 1.2rem
+      color: white
+    box-shadow: 0px 5px 2px $theme-two-del-reset-shadow
+    background: $theme-two-del-reset
+  .equal
+    p
+      color: white
+    box-shadow: 0px 5px 2px $theme-two-action-shadow
+    background: $theme-two-action
 .theme-three
   background-color: $theme-three-primary
   .top-text
@@ -207,4 +231,28 @@ export default {
     background: $theme-three-secondary
   .display
     background: $theme-three-screen
+  .input-container
+    background: $theme-three-secondary
+  .button
+    p
+      color: $theme-three-text
+    box-shadow: 0px 5px 2px $theme-three-key-shadow
+    background: $theme-three-key
+  .del
+    p
+      font-size: 1.2rem
+      color: white
+    box-shadow: 0px 5px 2px $theme-three-del-reset-shadow
+    background: $theme-three-del-reset
+  .reset
+    p
+      font-size: 1.2rem
+      color: white
+    box-shadow: 0px 5px 2px $theme-three-del-reset-shadow
+    background: $theme-three-del-reset
+  .equal
+    p
+      color: white
+    box-shadow: 0px 5px 2px $theme-three-action-shadow
+    background: $theme-three-action
 </style>
