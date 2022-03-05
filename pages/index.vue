@@ -18,21 +18,23 @@
             .three(@click="selectedTheme = 'three'")
               .active-toggle(v-if="selectedTheme === 'three'")
     .display
+      h1(v-if="operatorHoldState") {{firstNumberEntered}}
+      h1(v-else) {{numberFormatted}} 
     .input-container
       .input
         .row.row-one
-          .button(v-for="i in [7, 8, 9]")
+          .button(v-for="i in [7, 8, 9]", @click="numberClicked(i)")
             p {{i}}
-          .del
+          .del(@click="resetCalc")
             p DEL
         .row.row-two
-          .button(v-for="i in [4, 5, 6,'+']")
+          .button(v-for="i in [4, 5, 6,'+']", @click="numberClicked(i)", :class="{'operator-clicked': isInHoldState(i)}")
             p {{i}}
         .row.row-three
-          .button(v-for="i in [1, 2, 3, '-']")
+          .button(v-for="i in [1, 2, 3, '-']", @click="numberClicked(i)", :class="{'operator-clicked': isInHoldState(i)}")
             p {{i}}
         .row.row-four
-          .button(v-for="i in ['.', 0, '/', 'x']")
+          .button(v-for="i in ['.', 0, '/', 'x']", @click="numberClicked(i)", :class="{'operator-clicked': isInHoldState(i)}")
             p {{i}}
         .row.row-five
           .button-last-row.reset
@@ -42,20 +44,81 @@
 </template>
 
 <script>
+import _ from 'lodash'
+
 export default {
   data() {
     return {
-      selectedTheme: "one",
-    };
+      selectedTheme: 'one',
+      number: [],
+      firstNumberEntered: 0,
+      operatorEntered: null,
+      secondNumberEntered: 0,
+      operatorSelected: null,
+      dummy: 0,
+    }
   },
-  computed: {
-    theme() {
-      return {
-        "--theme-primary": "$theme-" + this.selectedTheme + "-primary",
-      };
+  methods: {
+    numberClicked(number) {
+      if (!Number(number)) {
+        if (this.firstNumberEntered === 0) {
+          this.firstNumberEntered = Number(this.numberFormatted)
+        } else if (
+          this.firstNumberEntered > 0 &&
+          this.secondNumberEntered === 0
+        ) {
+          this.secondNumberEntered = Number(this.numberFormatted)
+        }
+        if (
+          this.firstNumberEntered > 0 &&
+          this.secondNumberEntered > 0 &&
+          this.operatorEntered !== null
+        ) {
+          this.firstNumberEntered = this.result
+          this.secondNumberEntered = 0
+        }
+        this.number = []
+        this.operatorSelected = number
+      }
+      if (Number(number)) {
+        this.number.push(number)
+      }
+    },
+    isInHoldState(operator) {
+      return this.operatorHoldState && this.operatorSelected === operator
+    },
+    resetCalc() {
+      this.number = null
+      this.statusList = []
     },
   },
-};
+  computed: {
+    numberFormatted() {
+      return _.join(this.number, '')
+    },
+    operatorHoldState() {
+      return (
+        this.firstNumberEntered > 0 &&
+        this.secondNumberEntered === 0 &&
+        this.number.length === 0
+      )
+    },
+    result() {
+      return eval(
+        this.firstNumberEntered +
+          this.operatorEntered +
+          this.secondNumberEntered
+      )
+    },
+  },
+  watch: {
+    number() {
+      if (!this.operatorHoldState) {
+        this.operatorEntered = this.operatorSelected
+      }
+    },
+  },
+}
 </script>
 
 <style lang="sass" scoped>
@@ -114,13 +177,21 @@ export default {
   margin: 0.23rem 0 0 0.25rem
   border-radius: 100%
 .display
+  display: flex
+  justify-content: flex-end
+  align-items: center
   flex: 0.3
   margin: 1.5rem 0
   border-radius: 0.5rem
+  padding-right: 1.5rem
+  transition: 0.2s
+  h1
+    font-size: 2.5rem
 .input-container
   flex: 1
   display: flex
   border-radius: 0.5rem
+  transition: 0.2s
 .row
   display: flex
   margin-bottom: 1.5rem
@@ -128,6 +199,9 @@ export default {
   display: grid
   grid-template-columns: 1fr
   padding: 2rem 2rem 1rem
+.operator-clicked
+  &:last-child
+    opacity: 0.6
 .button, .del
   cursor: pointer
   p
@@ -140,6 +214,9 @@ export default {
   align-items: center
   width: 6rem
   margin-right: 1rem
+  transition: 0.2s
+  &:hover
+    opacity: 0.7
 .button-last-row
   cursor: pointer
   flex: 1
@@ -163,29 +240,31 @@ export default {
     background: $theme-one-secondary
   .display
     background: $theme-one-screen
+    h1
+      color: white
   .input-container
     background: $theme-one-secondary
   .button
     p
       color: $theme-one-text
-    box-shadow: 0px 5px 2px $theme-one-key-shadow
+    box-shadow: 0px 4px 2px $theme-one-key-shadow
     background: $theme-one-key
   .del
     p
       font-size: 1.2rem
       color: white
-    box-shadow: 0px 5px 2px $theme-one-del-reset-shadow
+    box-shadow: 0px 4px 2px $theme-one-del-reset-shadow
     background: $theme-one-del-reset
   .reset
     p
       font-size: 1.2rem
       color: white
-    box-shadow: 0px 5px 2px $theme-one-del-reset-shadow
+    box-shadow: 0px 4px 2px $theme-one-del-reset-shadow
     background: $theme-one-del-reset
   .equal
     p
       color: white
-    box-shadow: 0px 5px 2px $theme-one-action-shadow
+    box-shadow: 0px 4px 2px $theme-one-action-shadow
     background: $theme-one-action
 .theme-two
   background-color: $theme-two-primary
@@ -197,29 +276,31 @@ export default {
     background: $theme-two-secondary
   .display
     background: $theme-two-screen
+    h1
+      color: $theme-two-text
   .input-container
     background: $theme-two-secondary
   .button
     p
       color: $theme-two-text
-    box-shadow: 0px 5px 2px $theme-two-key-shadow
+    box-shadow: 0px 4px 2px $theme-two-key-shadow
     background: $theme-two-key
   .del
     p
       font-size: 1.2rem
       color: white
-    box-shadow: 0px 5px 2px $theme-two-del-reset-shadow
+    box-shadow: 0px 4px 2px $theme-two-del-reset-shadow
     background: $theme-two-del-reset
   .reset
     p
       font-size: 1.2rem
       color: white
-    box-shadow: 0px 5px 2px $theme-two-del-reset-shadow
+    box-shadow: 0px 4px 2px $theme-two-del-reset-shadow
     background: $theme-two-del-reset
   .equal
     p
       color: white
-    box-shadow: 0px 5px 2px $theme-two-action-shadow
+    box-shadow: 0px 4px 2px $theme-two-action-shadow
     background: $theme-two-action
 .theme-three
   background-color: $theme-three-primary
@@ -231,28 +312,30 @@ export default {
     background: $theme-three-secondary
   .display
     background: $theme-three-screen
+    h1
+      color: $theme-three-text
   .input-container
     background: $theme-three-secondary
   .button
     p
       color: $theme-three-text
-    box-shadow: 0px 5px 2px $theme-three-key-shadow
+    box-shadow: 0px 4px 2px $theme-three-key-shadow
     background: $theme-three-key
   .del
     p
       font-size: 1.2rem
       color: white
-    box-shadow: 0px 5px 2px $theme-three-del-reset-shadow
+    box-shadow: 0px 4px 2px $theme-three-del-reset-shadow
     background: $theme-three-del-reset
   .reset
     p
       font-size: 1.2rem
       color: white
-    box-shadow: 0px 5px 2px $theme-three-del-reset-shadow
+    box-shadow: 0px 4px 2px $theme-three-del-reset-shadow
     background: $theme-three-del-reset
   .equal
     p
       color: white
-    box-shadow: 0px 5px 2px $theme-three-action-shadow
+    box-shadow: 0px 4px 2px $theme-three-action-shadow
     background: $theme-three-action
 </style>
