@@ -169,14 +169,14 @@ export default {
   height: 100vh
   h2
     margin: 0
-  @media (max-width: 400px)
+  @media (max-width: 850px)
     height: 100vh
 .calc-container
   display: flex
   flex-direction: column
   width: 35vw
   height: 85vh
-  @media (max-width: 400px)
+  @media (max-width: 850px)
     width: 90%
 .header
   flex: 0.1
@@ -237,16 +237,15 @@ export default {
 .row
   display: flex
   margin-bottom: 1.5rem
+  justify-content: space-between
   &:last-child
     margin-bottom: 0
-  @media (max-width: 400px)
-    justify-content: space-between
 .input
   width: 100%
   display: grid
   grid-template-columns: 1fr
-  padding: 2rem 2rem 1rem
-  @media (max-width: 400px)
+  padding: 2rem
+  @media (max-width: 850px)
     padding: 1.5rem
 .operator-clicked
   &:last-child
@@ -259,18 +258,15 @@ export default {
     font-size: 1.8rem
   display: flex
   border-radius: 0.5rem
+  flex: 1
   justify-content: center
   align-items: center
-  width: 6rem
   margin-right: 1rem
   transition: 0.2s
+  &:last-child
+    margin-right: 0
   &:hover
     opacity: 0.7
-  @media (max-width: 400px)
-    margin: 0
-    width: 4.2rem
-    p
-      font-size: 1.5rem
 .button-last-row
   cursor: pointer
   flex: 1
@@ -284,9 +280,8 @@ export default {
   align-items: center
   width: 6rem
   margin-right: 1rem
-  @media (max-width: 400px)
-    &:last-child
-      margin-right: 0
+  &:last-child
+    margin-right: 0
 .theme-one
   background-color: $theme-one-primary
   .top-text
