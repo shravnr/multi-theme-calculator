@@ -25,7 +25,7 @@
         .row.row-one
           .button(v-for="i in [7, 8, 9]", @click="numberClicked(i)")
             p {{i}}
-          .del(@click="deleteValue")
+          .del(@click="deleteValue", tabindex="0", @keydown.esc="deleteValue")
             p DEL
         .row.row-two
           .button(v-for="i in [4, 5, 6,'+']", @click="numberClicked(i)", :class="{'operator-clicked': isInHoldState(i)}")
@@ -49,6 +49,7 @@ import _ from 'lodash'
 export default {
   data() {
     return {
+      keyboardKeyPressed: null,
       selectedTheme: 'one',
       number: [],
       firstNumberEntered: 0,
@@ -56,6 +57,11 @@ export default {
       secondNumberEntered: 0,
       operatorSelected: null,
     }
+  },
+  mounted() {
+    window.addEventListener('keydown', (e) => {
+      this.keyboardKeyPressed = e.key
+    })
   },
   methods: {
     numberClicked(number) {
@@ -124,6 +130,30 @@ export default {
       if (!this.operatorHoldState) {
         this.operatorEntered = this.operatorSelected
       }
+      if (this.number.length > 0 && this.operatorSelected === null) {
+        this.firstNumberEntered = 0
+      }
+    },
+    keyboardKeyPressed() {
+      const operators = ['+', '-', '/', 'x', '.']
+      if (
+        operators.includes(this.keyboardKeyPressed) ||
+        !_.isNaN(Number(this.keyboardKeyPressed))
+      ) {
+        this.numberClicked(this.keyboardKeyPressed)
+      }
+      if (
+        this.keyboardKeyPressed === 'Enter' ||
+        this.keyboardKeyPressed === '='
+      ) {
+        this.numberClicked('=')
+      }
+      if (this.keyboardKeyPressed === 'Backspace') {
+        this.deleteValue()
+      }
+      if (this.keyboardKeyPressed === 'Escape') {
+        this.resetCalc()
+      }
     },
   },
 }
@@ -139,11 +169,15 @@ export default {
   height: 100vh
   h2
     margin: 0
+  @media (max-width: 400px)
+    height: 100vh
 .calc-container
   display: flex
   flex-direction: column
   width: 35vw
   height: 85vh
+  @media (max-width: 400px)
+    width: 90%
 .header
   flex: 0.1
   display: flex
@@ -203,10 +237,17 @@ export default {
 .row
   display: flex
   margin-bottom: 1.5rem
+  &:last-child
+    margin-bottom: 0
+  @media (max-width: 400px)
+    justify-content: space-between
 .input
+  width: 100%
   display: grid
   grid-template-columns: 1fr
   padding: 2rem 2rem 1rem
+  @media (max-width: 400px)
+    padding: 1.5rem
 .operator-clicked
   &:last-child
     opacity: 0.6
@@ -225,6 +266,11 @@ export default {
   transition: 0.2s
   &:hover
     opacity: 0.7
+  @media (max-width: 400px)
+    margin: 0
+    width: 4.2rem
+    p
+      font-size: 1.5rem
 .button-last-row
   cursor: pointer
   flex: 1
@@ -238,6 +284,9 @@ export default {
   align-items: center
   width: 6rem
   margin-right: 1rem
+  @media (max-width: 400px)
+    &:last-child
+      margin-right: 0
 .theme-one
   background-color: $theme-one-primary
   .top-text
