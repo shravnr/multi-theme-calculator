@@ -74,14 +74,14 @@ export default {
         if (this.firstNumberEntered === 0) {
           this.firstNumberEntered = Number(this.numberFormatted)
         } else if (
-          this.firstNumberEntered > 0 &&
+          this.firstNumberEntered !== 0 &&
           this.secondNumberEntered === 0
         ) {
           this.secondNumberEntered = Number(this.numberFormatted)
         }
         if (
-          this.firstNumberEntered > 0 &&
-          this.secondNumberEntered > 0 &&
+          this.firstNumberEntered !== 0 &&
+          this.secondNumberEntered !== 0 &&
           this.operatorEntered !== null
         ) {
           this.firstNumberEntered = this.result
@@ -89,6 +89,13 @@ export default {
         }
         this.number = []
         this.operatorSelected = number === '=' ? null : number
+        if (this.operatorSelected === '-') {
+          if (this.number.length === 0 && this.firstNumberEntered === 0) {
+            this.operatorSelected = null
+            this.operatorEntered = null
+            this.number.push(number)
+          }
+        }
       } else {
         this.number.push(number)
       }
@@ -113,7 +120,7 @@ export default {
     },
     operatorHoldState() {
       return (
-        this.firstNumberEntered > 0 &&
+        this.firstNumberEntered !== 0 &&
         this.secondNumberEntered === 0 &&
         this.number.length === 0
       )
@@ -137,6 +144,16 @@ export default {
       }
       if (this.number.length > 0 && this.operatorSelected === null) {
         this.firstNumberEntered = 0
+      }
+    },
+    operatorSelected() {
+      if (
+        this.operatorSelected === null &&
+        this.number.length === 0 &&
+        this.operatorSelected !== '-'
+      ) {
+        this.operatorSelected = null
+        this.operatorEntered = null
       }
     },
     keyboardKeyPressed() {
@@ -174,8 +191,6 @@ export default {
   height: 100vh
   h2
     margin: 0
-  @media (max-width: 850px)
-    height: 100vh
 .calc-container
   display: flex
   flex-direction: column
