@@ -58,6 +58,11 @@ export default {
       operatorSelected: null,
     }
   },
+  head() {
+    return {
+      title: 'Themed Calculator | Shravan',
+    }
+  },
   mounted() {
     window.addEventListener('keydown', (e) => {
       this.keyboardKeyPressed = e.key
