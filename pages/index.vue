@@ -25,7 +25,7 @@
         .row.row-one
           .button(v-for="i in [7, 8, 9]", @click="numberClicked(i)")
             p {{i}}
-          .del(@click="resetCalc")
+          .del(@click="deleteValue")
             p DEL
         .row.row-two
           .button(v-for="i in [4, 5, 6,'+']", @click="numberClicked(i)", :class="{'operator-clicked': isInHoldState(i)}")
@@ -37,9 +37,9 @@
           .button(v-for="i in ['.', 0, '/', 'x']", @click="numberClicked(i)", :class="{'operator-clicked': isInHoldState(i)}")
             p {{i}}
         .row.row-five
-          .button-last-row.reset
+          .button-last-row.reset(@click="resetCalc")
             p RESET
-          .button-last-row.equal
+          .button-last-row.equal(@click="numberClicked('=')")
             p =
 </template>
 
@@ -55,12 +55,11 @@ export default {
       operatorEntered: null,
       secondNumberEntered: 0,
       operatorSelected: null,
-      dummy: 0,
     }
   },
   methods: {
     numberClicked(number) {
-      if (!Number(number)) {
+      if (_.isNaN(Number(number)) && number !== '.') {
         if (this.firstNumberEntered === 0) {
           this.firstNumberEntered = Number(this.numberFormatted)
         } else if (
@@ -78,18 +77,23 @@ export default {
           this.secondNumberEntered = 0
         }
         this.number = []
-        this.operatorSelected = number
-      }
-      if (Number(number)) {
+        this.operatorSelected = number === '=' ? null : number
+      } else {
         this.number.push(number)
       }
     },
     isInHoldState(operator) {
       return this.operatorHoldState && this.operatorSelected === operator
     },
+    deleteValue() {
+      this.number = []
+    },
     resetCalc() {
-      this.number = null
-      this.statusList = []
+      this.number = []
+      this.firstNumberEntered = 0
+      this.secondNumberEntered = 0
+      this.operatorEntered = null
+      this.operatorSelected = null
     },
   },
   computed: {
@@ -104,11 +108,15 @@ export default {
       )
     },
     result() {
-      return eval(
-        this.firstNumberEntered +
-          this.operatorEntered +
-          this.secondNumberEntered
-      )
+      if (this.operatorEntered === '+') {
+        return this.firstNumberEntered + this.secondNumberEntered
+      } else if (this.operatorEntered === '-') {
+        return this.firstNumberEntered - this.secondNumberEntered
+      } else if (this.operatorEntered === '/') {
+        return this.firstNumberEntered / this.secondNumberEntered
+      } else if (this.operatorEntered === 'x') {
+        return this.firstNumberEntered * this.secondNumberEntered
+      }
     },
   },
   watch: {
