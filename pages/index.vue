@@ -25,7 +25,7 @@
         .row.row-one
           .button(v-for="i in [7, 8, 9]", @click="numberClicked(i)")
             p {{i}}
-          .del(@click="deleteValue", tabindex="0", @keydown.esc="deleteValue")
+          .del(@click="deleteValue")
             p DEL
         .row.row-two
           .button(v-for="i in [4, 5, 6,'+']", @click="numberClicked(i)", :class="{'operator-clicked': isInHoldState(i)}")
@@ -45,6 +45,7 @@
 
 <script>
 import _ from 'lodash'
+import 'animate.css'
 
 export default {
   data() {
@@ -233,6 +234,8 @@ export default {
   .one, .two, .three
     flex: 1
 .active-toggle
+  animation: rubberBand
+  animation-duration: 1s
   transition: 0.5s
   height: 0.75rem
   width: 0.75rem
@@ -333,11 +336,17 @@ export default {
       color: white
     box-shadow: 0px 4px 2px $theme-one-del-reset-shadow
     background: $theme-one-del-reset
+    transition: 0.3s
+    &:hover
+      opacity: 0.7
   .equal
     p
       color: white
     box-shadow: 0px 4px 2px $theme-one-action-shadow
     background: $theme-one-action
+    transition: 0.3s
+    &:hover
+      opacity: 0.7
 .theme-two
   background-color: $theme-two-primary
   .top-text
